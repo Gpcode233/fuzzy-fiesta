@@ -9,7 +9,7 @@ type CommercePayload = {
   quote_currency?: string;
   target_currency: string;
   meta: { name: string; email: string };
-  devMode: boolean;
+  devMode?: boolean;
   source: 'payment-link';
   source_id: string;
   onSuccess: (data: unknown) => void;
@@ -18,27 +18,40 @@ type CommercePayload = {
 
 type BushaCommerceFn = (payload: CommercePayload) => void;
 
+const isSandbox = (process.env.NEXT_PUBLIC_BUSHA_ENV ?? 'sandbox') !== 'production';
+
 export function CheckoutWidget({ link }: { link: PaymentLink }) {
   const [name, setName] = useState('Customer');
   const [email, setEmail] = useState('customer@email.com');
   const [status, setStatus] = useState<'idle' | 'success'>('idle');
+  const [launching, setLaunching] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const openWidget = async () => {
-    const module = await import('@busha/commerce-js');
-    const BushaCommerce = (module.default as unknown as BushaCommerceFn);
+    try {
+      setLaunching(true);
+      setError(null);
 
-    BushaCommerce({
-      public_key: link.pubKey,
-      quote_amount: link.quoteAmount,
-      quote_currency: link.quoteCurrency,
-      target_currency: link.settlementCurrency,
-      meta: { name, email },
-      devMode: true,
-      source: 'payment-link',
-      source_id: link.id,
-      onSuccess: () => setStatus('success'),
-      onClose: () => undefined
-    });
+      const module = await import('@busha/commerce-js');
+      const BushaCommerce = module.default as unknown as BushaCommerceFn;
+
+      BushaCommerce({
+        public_key: link.pubKey,
+        quote_amount: link.quoteAmount,
+        quote_currency: link.quoteCurrency,
+        target_currency: link.settlementCurrency,
+        meta: { name, email },
+        devMode: isSandbox ? true : undefined,
+        source: 'payment-link',
+        source_id: link.id,
+        onSuccess: () => setStatus('success'),
+        onClose: () => undefined
+      });
+    } catch {
+      setError('Could not open checkout right now. Please try again.');
+    } finally {
+      setLaunching(false);
+    }
   };
 
   if (status === 'success') {
@@ -56,7 +69,10 @@ export function CheckoutWidget({ link }: { link: PaymentLink }) {
       <p className="text-sm text-white/70">Enter your details and continue in the secure payment popup.</p>
       <input className="input" value={name} onChange={(event) => setName(event.target.value)} placeholder="Your name" />
       <input className="input" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="Email" type="email" />
-      <button className="btn-primary w-full" type="button" onClick={openWidget}>Pay Now</button>
+      {error ? <p className="text-sm text-red-300">{error}</p> : null}
+      <button className="btn-primary w-full" type="button" onClick={openWidget} disabled={launching}>
+        {launching ? 'Opening checkout...' : 'Pay Now'}
+      </button>
     </section>
   );
 }

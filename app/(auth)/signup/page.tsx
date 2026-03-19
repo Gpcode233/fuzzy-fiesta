@@ -11,9 +11,10 @@ export default function SignupPage() {
   const [userType, setUserType] = useState<UserType | null>(null);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const proceed = () => {
-    if (!name || !email) return;
+    if (!name || !email || !password) return;
     setStep('type');
   };
 
@@ -44,7 +45,7 @@ export default function SignupPage() {
       <div className="card grid gap-3">
         <input className="input" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
         <input className="input" placeholder="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-        <input className="input" placeholder="Password" type="password" />
+        <input className="input" placeholder="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         <button className="btn-primary mt-2" type="button" onClick={proceed}>Continue</button>
       </div>
     </main>

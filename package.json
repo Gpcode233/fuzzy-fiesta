@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@busha/commerce-js": "^2.2.6",
+    "@busha/commerce-js": "^1.0.28",
     "html-to-image": "^1.11.13",
     "next": "16.0.0",
     "qrcode": "^1.5.4",

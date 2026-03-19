@@ -2,9 +2,11 @@ import { ApiKeyCard } from '@/components/dashboard/dev/ApiKeyCard';
 import { WebhookConfig } from '@/components/dashboard/dev/WebhookConfig';
 import { CodeSnippet } from '@/components/dashboard/dev/CodeSnippet';
 import { TransactionTable } from '@/components/shared/TransactionTable';
-import { mockTransactions } from '@/lib/mockDb';
+import { getMockTransactions } from '@/lib/mockDb';
 
 export default function DeveloperDashboardPage() {
+  const transactions = getMockTransactions();
+
   return (
     <main className="mx-auto max-w-6xl space-y-4 p-8">
       <h1 className="text-3xl font-bold">Developer dashboard</h1>
@@ -14,7 +16,7 @@ export default function DeveloperDashboardPage() {
         <WebhookConfig />
       </div>
       <CodeSnippet />
-      <TransactionTable transactions={mockTransactions} />
+      <TransactionTable transactions={transactions} />
     </main>
   );
 }

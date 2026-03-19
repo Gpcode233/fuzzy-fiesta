@@ -16,12 +16,14 @@ export function StoreBuilder() {
   const [fixedAmount, setFixedAmount] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [createdLink, setCreatedLink] = useState<PaymentLink | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const checkoutUrl = useMemo(() => createdLink ? `${appUrl}/pay/${createdLink.id}` : '', [appUrl, createdLink]);
+  const checkoutUrl = useMemo(() => (createdLink ? `${appUrl}/pay/${createdLink.id}` : ''), [appUrl, createdLink]);
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsSubmitting(true);
+    setError(null);
 
     const payload: PaymentLinkPayload = {
       fixed: fixedAmount,
@@ -36,15 +38,26 @@ export function StoreBuilder() {
       require_extra_info: [{ field_name: 'email', required: true }]
     };
 
-    const response = await fetch('/api/payment-links', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
+    try {
+      const response = await fetch('/api/payment-links', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
 
-    const data = (await response.json()) as PaymentLink;
-    setCreatedLink(data);
-    setIsSubmitting(false);
+      const body = (await response.json()) as PaymentLink | { error?: string };
+      if (!response.ok || !('id' in body)) {
+        const message = 'error' in body && body.error ? body.error : 'Unable to create payment link. Please try again.';
+        setError(message);
+        return;
+      }
+
+      setCreatedLink(body);
+    } catch {
+      setError('Unable to create payment link right now. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const copyLink = async () => {
@@ -89,6 +102,8 @@ export function StoreBuilder() {
             <input className="input mt-1" value={amount} onChange={(e) => setAmount(e.target.value)} required={fixedAmount} />
           </label>
         ) : null}
+
+        {error ? <p className="text-sm text-red-300">{error}</p> : null}
 
         <button className="btn-primary" type="submit" disabled={isSubmitting}>
           {isSubmitting ? 'Creating...' : 'Generate link'}

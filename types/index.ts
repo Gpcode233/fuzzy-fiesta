@@ -53,3 +53,13 @@ export interface Transaction {
   status: 'pending' | 'completed' | 'failed';
   createdAt: string;
 }
+
+export interface BushaQuote {
+  id: string;
+  source_currency: string;
+  target_currency: string;
+  source_amount: string;
+  target_amount: string;
+  expires_at: string;
+  status: string;
+}

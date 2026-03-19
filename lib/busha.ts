@@ -1,4 +1,10 @@
-import { mockPaymentLinks } from '@/lib/mockDb';
+import {
+  findMockPaymentLink,
+  getMockPaymentLinks,
+  insertMockPaymentLink,
+  removeMockPaymentLink,
+  updateMockPaymentLink
+} from '@/lib/mockDb';
 import type { PaymentLink, PaymentLinkPayload } from '@/types';
 
 const BUSHA_BASE_URL = process.env.BUSHA_BASE_URL ?? 'https://api.sandbox.busha.so';
@@ -35,34 +41,9 @@ function toAppPaymentLink(raw: Record<string, unknown>): PaymentLink {
   };
 }
 
-function createMockPaymentLink(payload: PaymentLinkPayload): PaymentLink {
-  const id = `pl_${Math.random().toString(36).slice(2, 10)}`;
-  const link = {
-    id,
-    userId: 'merchant-1',
-    name: payload.name,
-    title: payload.title,
-    description: payload.description,
-    isFixed: payload.fixed,
-    quoteAmount: payload.quote_amount,
-    quoteCurrency: payload.quote_currency,
-    settlementCurrency: payload.target_currency,
-    allowCustomerAmount: payload.allow_customer_amount,
-    status: 'active' as const,
-    link: `${APP_URL}/pay/${id}`,
-    pubKey: `pk_test_${id}`,
-    totalReceived: 0,
-    transactionCount: 0,
-    createdAt: new Date().toISOString()
-  };
-
-  mockPaymentLinks.unshift(link);
-  return link;
-}
-
 export async function createPaymentLink(payload: PaymentLinkPayload): Promise<PaymentLink> {
   if (!BUSHA_SECRET_KEY) {
-    return createMockPaymentLink(payload);
+    return insertMockPaymentLink(payload);
   }
 
   const response = await fetch(`${BUSHA_BASE_URL}/v1/payments/links`, {
@@ -80,7 +61,7 @@ export async function createPaymentLink(payload: PaymentLinkPayload): Promise<Pa
 }
 
 export async function listPaymentLinks(): Promise<PaymentLink[]> {
-  if (!BUSHA_SECRET_KEY) return mockPaymentLinks;
+  if (!BUSHA_SECRET_KEY) return getMockPaymentLinks();
 
   const response = await fetch(`${BUSHA_BASE_URL}/v1/payments/links`, {
     headers: { Authorization: `Bearer ${BUSHA_SECRET_KEY}` },
@@ -95,7 +76,7 @@ export async function listPaymentLinks(): Promise<PaymentLink[]> {
 
 export async function getPaymentLink(id: string): Promise<PaymentLink | null> {
   if (!BUSHA_SECRET_KEY) {
-    return mockPaymentLinks.find((link) => link.id === id) ?? null;
+    return findMockPaymentLink(id);
   }
 
   const response = await fetch(`${BUSHA_BASE_URL}/v1/payments/links/${id}`, {
@@ -112,17 +93,7 @@ export async function getPaymentLink(id: string): Promise<PaymentLink | null> {
 
 export async function updatePaymentLink(id: string, payload: Partial<PaymentLinkPayload>) {
   if (!BUSHA_SECRET_KEY) {
-    const target = mockPaymentLinks.find((link) => link.id === id);
-    if (!target) return null;
-
-    if (payload.title) target.title = payload.title;
-    if (payload.description !== undefined) target.description = payload.description;
-    if (payload.target_currency) target.settlementCurrency = payload.target_currency;
-    if (payload.quote_amount !== undefined) target.quoteAmount = payload.quote_amount;
-    if (payload.quote_currency) target.quoteCurrency = payload.quote_currency;
-    if (payload.fixed !== undefined) target.isFixed = payload.fixed;
-    if (payload.allow_customer_amount !== undefined) target.allowCustomerAmount = payload.allow_customer_amount;
-    return target;
+    return updateMockPaymentLink(id, payload);
   }
 
   const response = await fetch(`${BUSHA_BASE_URL}/v1/payments/links/${id}`, {
@@ -140,10 +111,7 @@ export async function updatePaymentLink(id: string, payload: Partial<PaymentLink
 
 export async function deletePaymentLink(id: string): Promise<boolean> {
   if (!BUSHA_SECRET_KEY) {
-    const idx = mockPaymentLinks.findIndex((link) => link.id === id);
-    if (idx < 0) return false;
-    mockPaymentLinks.splice(idx, 1);
-    return true;
+    return removeMockPaymentLink(id);
   }
 
   const response = await fetch(`${BUSHA_BASE_URL}/v1/payments/links/${id}`, {

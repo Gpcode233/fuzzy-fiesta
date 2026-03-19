@@ -1,11 +1,13 @@
 import { TransactionTable } from '@/components/shared/TransactionTable';
-import { mockTransactions } from '@/lib/mockDb';
+import { getMockTransactions } from '@/lib/mockDb';
 
 export default function DeveloperTransactionsPage() {
+  const transactions = getMockTransactions();
+
   return (
     <main className="mx-auto max-w-5xl p-8">
-      <h1 className="text-3xl font-bold mb-4">Transactions</h1>
-      <TransactionTable transactions={mockTransactions} />
+      <h1 className="mb-4 text-3xl font-bold">Transactions</h1>
+      <TransactionTable transactions={transactions} />
     </main>
   );
 }

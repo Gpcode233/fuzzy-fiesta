@@ -1,78 +1,38 @@
 'use client';
 
 import { useState } from 'react';
-import type { PaymentLink } from '@/types';
-
-type CommercePayload = {
-  public_key: string;
-  quote_amount?: string;
-  quote_currency?: string;
-  target_currency: string;
-  meta: { name: string; email: string };
-  devMode?: boolean;
-  source: 'payment-link';
-  source_id: string;
-  onSuccess: (data: unknown) => void;
-  onClose: (data: unknown) => void;
-};
-
-type BushaCommerceFn = (payload: CommercePayload) => void;
-
-const isSandbox = (process.env.NEXT_PUBLIC_BUSHA_ENV ?? 'sandbox') !== 'production';
+import type { BushaQuote, PaymentLink } from '@/types';
+import { CurrencySelector } from './CurrencySelector';
+import { QuoteDisplay } from './QuoteDisplay';
 
 export function CheckoutWidget({ link }: { link: PaymentLink }) {
-  const [name, setName] = useState('Customer');
-  const [email, setEmail] = useState('customer@email.com');
-  const [status, setStatus] = useState<'idle' | 'success'>('idle');
-  const [launching, setLaunching] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [currency, setCurrency] = useState(link.acceptedCurrencies[0] ?? 'BTC');
+  const [quote, setQuote] = useState<BushaQuote | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const openWidget = async () => {
-    try {
-      setLaunching(true);
-      setError(null);
-
-      const module = await import('@busha/commerce-js');
-      const BushaCommerce = module.default as unknown as BushaCommerceFn;
-
-      BushaCommerce({
-        public_key: link.pubKey,
-        quote_amount: link.quoteAmount,
-        quote_currency: link.quoteCurrency,
+  const fetchQuote = async () => {
+    setLoading(true);
+    const res = await fetch('/api/quote', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        source_currency: currency,
         target_currency: link.settlementCurrency,
-        meta: { name, email },
-        devMode: isSandbox ? true : undefined,
-        source: 'payment-link',
-        source_id: link.id,
-        onSuccess: () => setStatus('success'),
-        onClose: () => undefined
-      });
-    } catch {
-      setError('Could not open checkout right now. Please try again.');
-    } finally {
-      setLaunching(false);
-    }
+        target_amount: String(link.amount ?? 100)
+      })
+    });
+    const data = (await res.json()) as BushaQuote;
+    setQuote(data);
+    setLoading(false);
   };
 
-  if (status === 'success') {
-    return (
-      <div className="card space-y-2 border-accent/40">
-        <h2 className="text-2xl font-semibold">Payment received!</h2>
-        <p className="text-white/70">Thanks for your payment. The merchant has been notified.</p>
-      </div>
-    );
-  }
-
   return (
-    <section className="card space-y-4">
-      <h2 className="text-xl font-semibold">Pay now</h2>
-      <p className="text-sm text-white/70">Enter your details and continue in the secure payment popup.</p>
-      <input className="input" value={name} onChange={(event) => setName(event.target.value)} placeholder="Your name" />
-      <input className="input" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="Email" type="email" />
-      {error ? <p className="text-sm text-red-300">{error}</p> : null}
-      <button className="btn-primary w-full" type="button" onClick={openWidget} disabled={launching}>
-        {launching ? 'Opening checkout...' : 'Pay Now'}
+    <div className="space-y-4">
+      <CurrencySelector currencies={link.acceptedCurrencies} value={currency} onChange={setCurrency} />
+      <button className="btn-primary" onClick={fetchQuote} disabled={loading} type="button">
+        {loading ? 'Fetching quote...' : 'Get Quote'}
       </button>
-    </section>
+      <QuoteDisplay quote={quote} />
+    </div>
   );
 }

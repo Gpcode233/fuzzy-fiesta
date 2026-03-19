@@ -6,41 +6,23 @@ export interface User {
   name: string;
   userType: UserType;
   settlementCurrency: string;
+  bushaAccountId?: string;
   createdAt: string;
 }
-
-export type PaymentLinkStatus = 'active' | 'paused' | 'archived';
 
 export interface PaymentLink {
   id: string;
   userId: string;
-  name: string;
   title: string;
   description?: string;
-  isFixed: boolean;
-  quoteAmount?: string;
-  quoteCurrency: string;
+  amount?: number;
+  currency: string;
+  acceptedCurrencies: string[];
   settlementCurrency: string;
-  allowCustomerAmount: boolean;
-  status: PaymentLinkStatus;
-  link: string;
-  pubKey: string;
+  status: 'active' | 'paused' | 'completed';
   totalReceived: number;
   transactionCount: number;
   createdAt: string;
-}
-
-export interface PaymentLinkPayload {
-  fixed: boolean;
-  one_time: boolean;
-  name: string;
-  title: string;
-  description?: string;
-  target_currency: string;
-  quote_amount?: string;
-  quote_currency: string;
-  allow_customer_amount: boolean;
-  require_extra_info: Array<{ field_name: string; required: boolean }>;
 }
 
 export interface Transaction {
@@ -50,7 +32,10 @@ export interface Transaction {
   payerAmount: string;
   settlementCurrency: string;
   settlementAmount: string;
+  exchangeRate: string;
   status: 'pending' | 'completed' | 'failed';
+  bushaQuoteId: string;
+  bushaTransferId?: string;
   createdAt: string;
 }
 
@@ -60,6 +45,8 @@ export interface BushaQuote {
   target_currency: string;
   source_amount: string;
   target_amount: string;
+  rate: { product: string; rate: string; side: string; type: string };
+  fees: Array<{ name: string; amount: string }>;
   expires_at: string;
   status: string;
 }

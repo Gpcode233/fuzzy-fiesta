@@ -2,41 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  color-scheme: dark;
-}
-
-body {
-  @apply min-h-screen bg-bg text-white;
-}
-
-.card {
-  @apply rounded-xl border border-white/10 bg-panel p-4;
-}
-
-.btn-primary {
-  @apply rounded-lg bg-accent px-4 py-2 font-semibold text-black hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-70;
-}
-
-.input {
-  @apply w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2;
-}
-
-@media print {
-  body * {
-    visibility: hidden;
-  }
-
-  #payment-poster,
-  #payment-poster * {
-    visibility: visible;
-  }
-
-  #payment-poster {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    margin: 0;
-  }
-}
+:root { color-scheme: dark; }
+body { @apply bg-bg text-white min-h-screen; }
+.card { @apply bg-panel border border-white/10 rounded-xl p-4; }
+.btn-primary { @apply bg-accent text-black font-semibold px-4 py-2 rounded-lg hover:opacity-90; }
+.input { @apply bg-black/40 border border-white/10 rounded-lg px-3 py-2 w-full; }

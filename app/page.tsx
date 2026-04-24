@@ -1,5 +1,7 @@
 import Link from 'next/link';
-
+import FeaturesSection  from 'components/features-5';
+import HeroSection from 'components/hero-section-one';
+ 
 const businessFeatures = [
   {
     title: 'Fixed store QR',
@@ -158,6 +160,10 @@ export default function HomePage() {
           </div>
         </section>
       </section>
+
+      <HeroSection />
+      <FeaturesSection />
+      <FeaturesSection />
     </main>
   );
 }

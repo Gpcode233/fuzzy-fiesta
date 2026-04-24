@@ -1,20 +1,18 @@
-import { notFound } from 'next/navigation';
 import { CheckoutWidget } from '@/components/checkout/CheckoutWidget';
-import { mockPaymentLinks } from '@/lib/mockDb';
+import { mockMerchantProfile, mockReceipts } from '@/lib/mockDb';
 
-export default async function PublicCheckoutPage({ params }: { params: Promise<{ linkId: string }> }) {
-  const { linkId } = await params;
-  const link = mockPaymentLinks.find((item) => item.id === linkId);
-  if (!link) return notFound();
+export default async function PublicCheckoutPage({
+  searchParams
+}: {
+  params: Promise<{ linkId: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const resolvedSearchParams = await searchParams;
+  const transactionId = typeof resolvedSearchParams.txn === 'string' ? resolvedSearchParams.txn : undefined;
 
   return (
-    <main className="mx-auto max-w-2xl p-8 space-y-4">
-      <div className="card">
-        <h1 className="text-3xl font-bold">{link.title}</h1>
-        <p className="text-white/70">{link.description}</p>
-        <p className="mt-2 text-xl">{link.amount} {link.currency}</p>
-      </div>
-      <CheckoutWidget link={link} />
+    <main className="min-h-screen px-4 py-6 md:px-8 md:py-10">
+      <CheckoutWidget merchant={mockMerchantProfile} receipts={mockReceipts} initialTransactionId={transactionId} />
     </main>
   );
 }

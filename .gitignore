@@ -1,0 +1,38 @@
+node_modules
+dist
+build
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment files
+.env
+.env.*
+.env.example
+
+# Cache and temp files
+.cache
+.parcel-cache
+.turbo
+.vite
+coverage
+tmp
+temp
+*.tmp
+
+# Framework and tool outputs
+.next
+.nuxt
+.svelte-kit
+storybook-static
+
+# Editor and OS files
+.DS_Store
+Thumbs.db
+.idea
+.vscode

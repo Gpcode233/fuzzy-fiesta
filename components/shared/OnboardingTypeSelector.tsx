@@ -13,20 +13,18 @@ export function OnboardingTypeSelector({ selected, onSelect }: Props) {
       <button
         type="button"
         onClick={() => onSelect('developer')}
-        className={`card text-left ${selected === 'developer' ? 'ring-2 ring-accent' : ''}`}
+        className={`card text-left transition-all hover:border-accent ${selected === 'developer' ? 'ring-2 ring-accent border-accent' : ''}`}
       >
-        <p className="text-2xl">🧑‍💻</p>
-        <h3 className="mt-2 text-xl font-bold">I&apos;m a developer</h3>
-        <p className="text-sm text-white/70">I want API access, webhooks, and SDK integration.</p>
+        <h3 className="text-xl font-serif font-medium text-zinc-900">I&apos;m a developer</h3>
+        <p className="mt-2 text-sm text-zinc-500">API keys, webhooks, and integration tools.</p>
       </button>
       <button
         type="button"
         onClick={() => onSelect('merchant')}
-        className={`card text-left ${selected === 'merchant' ? 'ring-2 ring-accent' : ''}`}
+        className={`card text-left transition-all hover:border-accent ${selected === 'merchant' ? 'ring-2 ring-accent border-accent' : ''}`}
       >
-        <p className="text-2xl">🏪</p>
-        <h3 className="mt-2 text-xl font-bold">I run a store or business</h3>
-        <p className="text-sm text-white/70">I want payment links with no coding required.</p>
+        <h3 className="text-xl font-serif font-medium text-zinc-900">I run a store or business</h3>
+        <p className="mt-2 text-sm text-zinc-500">Inventory, receipts, and QR payments without code.</p>
       </button>
     </div>
   );

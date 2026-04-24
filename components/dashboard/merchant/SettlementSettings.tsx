@@ -1,8 +1,8 @@
 export function SettlementSettings() {
   return (
     <div className="card">
-      <h3 className="font-semibold">Settlement Currency</h3>
-      <p className="text-sm text-white/70">Current: NGN</p>
+      <h3 className="font-semibold">Settlement currency</h3>
+      <p className="mt-2 text-sm text-[#6e5a46]">Current: NGN</p>
     </div>
   );
 }

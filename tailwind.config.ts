@@ -1,13 +1,52 @@
 import type { Config } from 'tailwindcss';
 
 export default {
-  content: ['./app/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
+  darkMode: ['class'],
+  content: [
+    './app/**/*.{js,ts,jsx,tsx}',
+    './components/**/*.{js,ts,jsx,tsx}',
+    './lib/**/*.{js,ts,jsx,tsx}',
+  ],
   theme: {
     extend: {
       colors: {
-        bg: '#0D0D0D',
-        panel: '#1A1A1A',
-        accent: '#00FF87'
+        bg: '#FFFFFF',
+        panel: '#F9FAFB',
+        accent: '#FACC15',
+        'accent-dark': '#EAB308',
+        border: 'var(--border)',
+        input: 'var(--input)',
+        ring: 'var(--ring)',
+        background: 'var(--background)',
+        foreground: 'var(--foreground)',
+        primary: {
+          DEFAULT: 'var(--primary)',
+          foreground: 'var(--primary-foreground)',
+        },
+        secondary: {
+          DEFAULT: 'var(--secondary)',
+          foreground: 'var(--secondary-foreground)',
+        },
+        destructive: {
+          DEFAULT: 'var(--destructive)',
+          foreground: 'var(--destructive-foreground)',
+        },
+        muted: {
+          DEFAULT: 'var(--muted)',
+          foreground: 'var(--muted-foreground)',
+        },
+        popover: {
+          DEFAULT: 'var(--popover)',
+          foreground: 'var(--popover-foreground)',
+        },
+        card: {
+          DEFAULT: 'var(--card)',
+          foreground: 'var(--card-foreground)',
+        },
+      },
+      fontFamily: {
+        sans: ['system-ui', 'sans-serif'],
+        serif: ['Georgia', 'ui-serif', 'serif'],
       }
     }
   },

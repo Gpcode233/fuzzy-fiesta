@@ -10,11 +10,15 @@ export function CurrencySelector({
   onChange: (next: string) => void;
 }) {
   return (
-    <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
+    <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
       {currencies.map((currency) => (
         <button
           key={currency}
-          className={`card ${value === currency ? 'ring-2 ring-accent' : ''}`}
+          className={`rounded-2xl border px-4 py-4 text-center text-base font-medium transition ${
+            value === currency
+              ? 'border-accent bg-accent text-black shadow-sm'
+              : 'border-[#ddcdb9] bg-[#fbf6ef] text-[#7d6852] hover:border-[#cdb89f] hover:text-zinc-900'
+          }`}
           onClick={() => onChange(currency)}
           type="button"
         >

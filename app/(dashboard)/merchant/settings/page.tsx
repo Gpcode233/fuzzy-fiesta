@@ -1,14 +1,14 @@
 import Link from 'next/link';
 import type { Route } from 'next';
-import { Boxes, CreditCard, Upload, UserCircle2 } from 'lucide-react';
+import { Boxes, Card, Upload, UserCircle } from '@solar-icons/react';
 import { createDemoQrSvgMarkup } from '@/lib/demo';
 import { mockInventory, mockMerchantProfile } from '@/lib/mockDb';
 import { InventoryManager } from '@/components/dashboard/merchant/InventoryManager';
 
 const sections = [
-  { key: 'profile', label: 'Profile', icon: UserCircle2 },
+  { key: 'profile', label: 'Profile', icon: UserCircle },
   { key: 'inventory', label: 'Inventory', icon: Boxes },
-  { key: 'checkout', label: 'Checkout', icon: CreditCard }
+  { key: 'checkout', label: 'Checkout', icon: Card }
 ] as const;
 
 export default async function MerchantSettingsPage({
@@ -49,7 +49,7 @@ export default async function MerchantSettingsPage({
                       isActive ? 'bg-[#f3e7d7] text-[#2c231c]' : 'text-[#7d6852] hover:bg-[#f8f1e7]'
                     }`}
                   >
-                    <Icon className="h-4 w-4" />
+                    <Icon weight="BoldDuotone" className="h-4 w-4" />
                     <span>{section.label}</span>
                   </Link>
                 );
@@ -85,7 +85,7 @@ export default async function MerchantSettingsPage({
                   <div className="rounded-[24px] border border-dashed border-[#d7c3ad] bg-[#f7efe4] p-5">
                     <div className="flex items-start gap-3">
                       <div className="rounded-full bg-white p-3">
-                        <Upload className="h-5 w-5 text-[#7d6852]" />
+                        <Upload weight="BoldDuotone" className="h-5 w-5 text-[#7d6852]" />
                       </div>
                       <div>
                         <p className="font-medium text-[#3b2d21]">Receipt logo</p>

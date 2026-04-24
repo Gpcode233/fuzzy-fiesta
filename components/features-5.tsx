@@ -1,39 +1,55 @@
-import { Activity, DraftingCompass, Mail, Zap } from 'lucide-react'
+import { CheckCircle } from '@solar-icons/react'
 import Image from 'next/image'
 
-export default function FeaturesSection() {
+interface Feature {
+    title: string;
+    body: string;
+}
+
+interface FeaturesSectionProps {
+    title: string;
+    description: string;
+    features: Feature[];
+    imageSrc?: string;
+    reverse?: boolean;
+}
+
+export default function FeaturesSection({
+    title,
+    description,
+    features,
+    imageSrc = "/payments.png",
+    reverse = false
+}: FeaturesSectionProps) {
     return (
         <section className="py-16 md:py-32">
             <div className="mx-auto max-w-6xl px-6">
-                <div className="grid items-center gap-12 md:grid-cols-2 md:gap-12 lg:grid-cols-5 lg:gap-24">
-                    <div className="lg:col-span-2">
+                <div className="grid items-center gap-12 md:grid-cols-2 lg:grid-cols-5 lg:gap-24">
+                    <div className={`lg:col-span-2 ${reverse ? 'md:order-last' : ''}`}>
                         <div className="md:pr-6 lg:pr-0">
-                            <h2 className="text-4xl font-semibold lg:text-5xl">Built for Scaling teams</h2>
-                            <p className="mt-6">Orrupti aut temporibus assumenda atque ab, accusamus sit, molestiae veniam laboriosam pariatur.</p>
+                            <h2 className="text-4xl font-semibold lg:text-5xl">{title}</h2>
+                            <p className="mt-6 text-muted-foreground">{description}</p>
                         </div>
-                        <ul className="mt-8 divide-y border-y *:flex *:items-center *:gap-3 *:py-3">
-                            <li>
-                                <Mail className="size-5" />
-                                Email and web support
-                            </li>
-                            <li>
-                                <Zap className="size-5" />
-                                Fast response time
-                            </li>
-                            <li>
-                                <Activity className="size-5" />
-                                Menitoring and analytics
-                            </li>
-                            <li>
-                                <DraftingCompass className="size-5" />
-                                Architectural review
-                            </li>
+                        <ul className="mt-8 divide-y border-y *:flex *:items-start *:gap-3 *:py-4">
+                            {features.map((feature, index) => (
+                                <li key={index}>
+                                    <div className="mt-1 bg-primary/10 rounded-full p-1 shrink-0">
+                                        <CheckCircle weight="BoldDuotone" className="size-5 text-primary" />
+                                    </div>
+                                    <div>
+                                        <h3 className="font-medium text-zinc-900">{feature.title}</h3>
+                                        <p className="text-sm text-muted-foreground mt-1">{feature.body}</p>
+                                    </div>
+                                </li>
+                            ))}
                         </ul>
                     </div>
                     <div className="border-border/50 relative rounded-3xl border p-3 lg:col-span-3">
-                        <div className="bg-linear-to-b aspect-76/59 relative rounded-2xl from-zinc-300 to-transparent p-px dark:from-zinc-700">
-                            <Image src="/payments.png" className="hidden rounded-[15px] dark:block" alt="payments illustration dark" width={1207} height={929} />
-                            <Image src="/payments-light.png" className="rounded-[15px] shadow dark:hidden" alt="payments illustration light" width={1207} height={929} />
+                        <div className="bg-linear-to-b aspect-76/59 relative rounded-2xl from-zinc-300 to-transparent p-px dark:from-zinc-700 overflow-hidden">
+                            <div className="bg-zinc-50 w-full h-full rounded-[15px] flex items-center justify-center">
+                                {/* Placeholder for actual app screenshots */}
+                                <div className="text-zinc-400 text-sm italic">Flux Interface Preview</div>
+                            </div>
                         </div>
                     </div>
                 </div>

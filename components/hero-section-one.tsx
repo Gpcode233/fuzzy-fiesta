@@ -2,31 +2,31 @@ import React from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { HeroHeader } from './header'
-import { ChevronRight, CirclePlay } from 'lucide-react'
+import { AltArrowRight, PlayCircle } from '@solar-icons/react'
 import Image from 'next/image'
 import Busha from '@/components/ui/pngs/busha-updated.png'
 
 export default function HeroSection() {
     return (
         <>
-            {/* <HeroHeader /> */}
+            <HeroHeader />
             <main className="overflow-hidden">
                 <section className="bg-linear-to-b to-muted from-background">
                     <div className="relative py-36">
                         <div className="relative z-10 mx-auto w-full max-w-5xl px-6">
                             <div className="md:w-1/2">
                                 <div>
-                                    <h1 className="max-w-md text-balance text-5xl font-medium md:text-6xl">Simple payments for startups</h1>
-                                    <p className="text-muted-foreground my-8 max-w-2xl text-balance text-xl">One tool that does it all. Search, generate, analyze, and chat—right inside Tailark.</p>
+                                    <h1 className="max-w-md text-balance text-5xl font-medium md:text-6xl">Universal payments for Business</h1>
+                                    <p className="text-muted-foreground my-8 max-w-2xl text-balance text-xl">Collect payments from your customers in any currency, fiat or crypto, & settle in your preferred local currency seamlessly.</p>
 
                                     <div className="flex items-center gap-3">
                                         <Button
                                             asChild
                                             size="lg"
                                             className="pr-4.5">
-                                            <Link href="#link">
+                                            <Link href="/signup">
                                                 <span className="text-nowrap">Get Started</span>
-                                                <ChevronRight className="opacity-50" />
+                                                <AltArrowRight weight="BoldDuotone" className="opacity-50 size-5" />
                                             </Link>
                                         </Button>
                                         <Button
@@ -35,8 +35,8 @@ export default function HeroSection() {
                                             size="lg"
                                             variant="outline"
                                             className="pl-5">
-                                            <Link href="#link">
-                                                <CirclePlay className="fill-primary/25 stroke-primary" />
+                                            <Link href="#">
+                                                <PlayCircle weight="BoldDuotone" className="size-6 text-primary" />
                                                 <span className="text-nowrap">Watch video</span>
                                             </Link>
                                         </Button>

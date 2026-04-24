@@ -1,6 +1,6 @@
 'use client';
 
-import { Plus } from 'lucide-react';
+import { AddCircle } from '@solar-icons/react';
 import { useMemo, useState } from 'react';
 import type { InventoryItem } from '@/types';
 import { InventoryTable } from './InventoryTable';
@@ -69,7 +69,7 @@ export function InventoryManager({ initialItems }: { initialItems: InventoryItem
             onClick={() => setShowForm((current) => !current)}
             className="inline-flex items-center gap-2 rounded-full bg-[#2d241c] px-5 py-3 text-sm font-semibold text-[#f8f1e7] transition hover:bg-[#1f1914]"
           >
-            <Plus className="h-4 w-4" />
+            <AddCircle weight="BoldDuotone" className="h-5 w-5" />
             Add item
           </button>
           <div className="rounded-full border border-[#d7c3ad] bg-[#f7efe4] px-4 py-2 text-xs uppercase tracking-[0.25em] text-[#9b8468]">

@@ -1,5 +1,6 @@
 'use client'
 import Link from 'next/link'
+import type { Route } from 'next'
 import { Logo } from '@/components/logo'
 import { HamburgerMenu, CloseCircle } from '@solar-icons/react'
 import { Button } from '@/components/ui/button'
@@ -55,7 +56,7 @@ export const HeroHeader = () => {
                                                 variant="ghost"
                                                 size="sm">
                                                 <Link
-                                                    href={item.href}
+                                                    href={item.href as Route}
                                                     className="text-base">
                                                     <span>{item.name}</span>
                                                 </Link>
@@ -72,7 +73,7 @@ export const HeroHeader = () => {
                                     {menuItems.map((item, index) => (
                                         <li key={index}>
                                             <Link
-                                                href={item.href}
+                                                href={item.href as Route}
                                                 className="text-muted-foreground hover:text-accent-foreground block duration-150">
                                                 <span>{item.name}</span>
                                             </Link>

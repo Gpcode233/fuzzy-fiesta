@@ -99,7 +99,7 @@ export function CheckoutWidget({
     return (
       <section className="max-w-2xl mx-auto rounded-[32px] border border-[#ddcdb9] bg-white p-12 text-center shadow-xl animate-in zoom-in-95 duration-500">
         <div className="size-20 rounded-full bg-emerald-100 flex items-center justify-center mx-auto mb-6">
-          <CheckCircle2 className="size-10 text-emerald-600" />
+          <CheckCircle className="size-10 text-emerald-600" weight="BoldDuotone" />
         </div>
         <h2 className="text-3xl font-bold text-zinc-900 mb-2">Payment Successful!</h2>
         <p className="text-[#6e5a46] mb-8">
@@ -153,7 +153,7 @@ export function CheckoutWidget({
                 Identify Transaction
               </p>
               <p className="flex items-center gap-2">
-                <CheckCircle className={cn("size-4", step === 'success' ? "text-emerald-600" : "text-[#9b8468] opacity-30")} />
+                <CheckCircle className={cn("size-4", step === 'confirm' ? "text-emerald-600" : "text-[#9b8468] opacity-30")} />
                 Confirm & Pay
               </p>
             </div>

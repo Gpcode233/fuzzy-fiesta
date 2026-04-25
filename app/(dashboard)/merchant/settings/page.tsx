@@ -233,7 +233,7 @@ export default function MerchantSettingsPage({
                       Your store is currently <span className="text-emerald-400 font-bold uppercase tracking-widest">LIVE</span> and accepting payments.
                     </p>
                     <Button variant="link" className="text-amber-400 p-0 h-auto text-xs" asChild>
-                      <Link href={merchantProfile.fixedCheckoutPath} target="_blank">View Live Store <ChevronRight className="ml-1 size-3" /></Link>
+                      <Link href={merchantProfile.fixedCheckoutPath as Route} target="_blank">View Live Store <ChevronRight className="ml-1 size-3" /></Link>
                     </Button>
                   </div>
                   <StoreIcon className="absolute -right-4 -bottom-4 size-24 opacity-10" />

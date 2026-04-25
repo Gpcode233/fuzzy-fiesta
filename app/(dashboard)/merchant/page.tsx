@@ -5,6 +5,7 @@ import Link from 'next/link';
 import type { Route } from 'next';
 import { createDemoQrSvgMarkup, createDemoPaymentLink } from '@/lib/demo';
 import { useStore } from '@/lib/store/useStore';
+import { cn } from '@/lib/utils';
 import { ReceiptTable } from '@/components/dashboard/merchant/ReceiptTable';
 import { TransactionTable } from '@/components/shared/TransactionTable';
 import { PosterActions } from '@/components/merchant/PosterActions';
@@ -27,8 +28,7 @@ import {
   ArrowUpRight, 
   QrCode, 
   Settings,
-  Plus,
-  Users
+  Plus
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -73,93 +73,76 @@ export default function MerchantDashboardPage() {
   });
 
   return (
-    <main className="min-h-screen p-4 md:p-8 space-y-8 max-w-7xl mx-auto">
+    <main className="min-h-screen p-4 md:p-8 space-y-8 max-w-7xl mx-auto pb-20">
       {/* Top Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Welcome back, {user.name}</h1>
-          <p className="text-muted-foreground">
-            Monitor your {merchantProfile.storeName} activity and growth.
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
-          <Button asChild variant="outline" className="rounded-full">
-            <Link href="/dashboard/merchant/settings">
-              <Settings className="mr-2 h-4 w-4" />
-              Settings
-            </Link>
-          </Button>
-          <Button asChild className="rounded-full bg-[#facc15] text-black hover:bg-[#eab308]">
-            <Link href="/dashboard/merchant/store">
-              <Plus className="mr-2 h-4 w-4" />
-              Create Receipt
-            </Link>
-          </Button>
+      <div className="rounded-[9px] border border-[#eadbc9] bg-white p-8 shadow-sm">
+        <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div>
+            <h1 className="font-serif text-4xl font-bold tracking-tight text-[#2c231c]">Welcome back, {user.name}</h1>
+            <p className="text-[#6e5a46] mt-2 flex items-center gap-2">
+              Monitoring {merchantProfile.storeName} activity and growth.
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <Button asChild variant="outline" className="rounded-[9px] border-[#dcc9b2] bg-white hover:bg-[#f8f1e7] h-11 px-6">
+              <Link href="/dashboard/merchant/settings">
+                <Settings className="mr-2 h-4 w-4" />
+                Settings
+              </Link>
+            </Button>
+            <Button asChild className="rounded-[9px] bg-[#facc15] text-black hover:bg-[#eab308] h-11 px-6">
+              <Link href="/dashboard/merchant/store">
+                <Plus className="mr-2 h-4 w-4" />
+                Create Receipt
+              </Link>
+            </Button>
+          </div>
         </div>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="rounded-[24px] border-[#eadbc9] bg-white shadow-sm">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Total Received</CardTitle>
-            <ArrowUpRight className="h-4 w-4 text-emerald-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">N{money.format(totalReceived)}</div>
-            <p className="text-xs text-muted-foreground mt-1">From {paidReceipts.length} paid receipts</p>
-          </CardContent>
-        </Card>
-        <Card className="rounded-[24px] border-[#eadbc9] bg-white shadow-sm">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Draft Receipts</CardTitle>
-            <Receipt className="h-4 w-4 text-amber-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{receipts.filter(r => r.status === 'draft').length}</div>
-            <p className="text-xs text-muted-foreground mt-1">Pending customer checkout</p>
-          </CardContent>
-        </Card>
-        <Card className="rounded-[24px] border-[#eadbc9] bg-white shadow-sm">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Active Links</CardTitle>
-            <QrCode className="h-4 w-4 text-blue-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{paymentLinks.length}</div>
-            <p className="text-xs text-muted-foreground mt-1">QR and payment links</p>
-          </CardContent>
-        </Card>
-        <Card className="rounded-[24px] border-[#eadbc9] bg-white shadow-sm">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Settlements</CardTitle>
-            <LayoutDashboard className="h-4 w-4 text-purple-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{transactions.length}</div>
-            <p className="text-xs text-muted-foreground mt-1">Total payout activity</p>
-          </CardContent>
-        </Card>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {[
+          { title: 'Total Received', value: `N${money.format(totalReceived)}`, sub: `From ${paidReceipts.length} paid receipts`, icon: ArrowUpRight },
+          { title: 'Draft Receipts', value: receipts.filter(r => r.status === 'draft').length, sub: 'Pending customer checkout', icon: Receipt },
+          { title: 'Active Links', value: paymentLinks.length, sub: 'QR and payment links', icon: QrCode },
+          { title: 'Settlements', value: transactions.length, sub: 'Total payout activity', icon: LayoutDashboard }
+        ].map((stat, i) => (
+          <Card key={i} className="rounded-[9px] border-[#eadbc9] bg-white shadow-sm">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-[10px] font-bold text-[#9b8468] uppercase tracking-[0.2em]">{stat.title}</CardTitle>
+              <div className="rounded-[9px] p-2 bg-[#f8f1e7]">
+                <stat.icon className="h-4 w-4 text-[#9b8468]" />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold tracking-tight text-[#2c231c]">{stat.value}</div>
+              <p className="text-xs text-[#6e5a46] mt-1.5 font-medium">{stat.sub}</p>
+            </CardContent>
+          </Card>
+        ))}
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[1fr_350px]">
+      <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
         <div className="space-y-6">
-          <Tabs defaultValue="overview" className="space-y-4">
-            <TabsList className="bg-[#f3e6d6] p-1 rounded-full border border-[#dcc9b2]">
-              <TabsTrigger value="overview" className="rounded-full px-6 data-[state=active]:bg-white">Overview</TabsTrigger>
-              <TabsTrigger value="receipts" className="rounded-full px-6 data-[state=active]:bg-white">Receipts</TabsTrigger>
-              <TabsTrigger value="settlements" className="rounded-full px-6 data-[state=active]:bg-white">Settlements</TabsTrigger>
-            </TabsList>
+          <Tabs defaultValue="overview" className="space-y-6">
+            <div className="flex items-center justify-between">
+              <TabsList className="bg-[#f3e6d6]/50 p-1 rounded-[9px] border border-[#dcc9b2]">
+                <TabsTrigger value="overview" className="rounded-[7px] px-8 data-[state=active]:bg-white data-[state=active]:shadow-sm text-xs font-bold uppercase tracking-widest">Overview</TabsTrigger>
+                <TabsTrigger value="receipts" className="rounded-[7px] px-8 data-[state=active]:bg-white data-[state=active]:shadow-sm text-xs font-bold uppercase tracking-widest">Receipts</TabsTrigger>
+                <TabsTrigger value="settlements" className="rounded-[7px] px-8 data-[state=active]:bg-white data-[state=active]:shadow-sm text-xs font-bold uppercase tracking-widest">Settlements</TabsTrigger>
+              </TabsList>
+            </div>
             
             <TabsContent value="overview" className="space-y-6">
-              <Card className="rounded-[28px] border-[#eadbc9] bg-white/50 backdrop-blur-sm shadow-sm overflow-hidden">
-                <CardHeader className="flex flex-row items-center justify-between border-b border-[#f3e6d6] bg-[#fdf8f3] py-4">
+              <Card className="rounded-[9px] border-[#eadbc9] bg-white shadow-sm overflow-hidden">
+                <CardHeader className="flex flex-row items-center justify-between border-b border-[#f3e6d6] bg-[#fdf8f3] py-5 px-8">
                   <div>
-                    <CardTitle className="text-xl">Recent Activity</CardTitle>
-                    <CardDescription>Your latest customer receipts and settlements</CardDescription>
+                    <CardTitle className="font-serif text-2xl text-[#2c231c]">Recent Activity</CardTitle>
+                    <CardDescription className="text-[#7d6852]">Your latest customer receipts and settlements</CardDescription>
                   </div>
-                  <Button variant="ghost" size="sm" asChild>
-                    <Link href="/dashboard/merchant/transactions">View All</Link>
+                  <Button variant="ghost" size="sm" asChild className="rounded-[9px] hover:bg-[#f3e6d6]">
+                    <Link href="/dashboard/merchant/transactions" className="text-xs font-bold">View All</Link>
                   </Button>
                 </CardHeader>
                 <CardContent className="p-0">
@@ -169,10 +152,10 @@ export default function MerchantDashboardPage() {
             </TabsContent>
 
             <TabsContent value="receipts">
-              <Card className="rounded-[28px] border-[#eadbc9] shadow-sm overflow-hidden">
-                <CardHeader className="bg-[#fdf8f3] border-b border-[#f3e6d6]">
-                  <CardTitle>Customer Receipts</CardTitle>
-                  <CardDescription>Manage and track all generated receipts</CardDescription>
+              <Card className="rounded-[9px] border-[#eadbc9] bg-white shadow-sm overflow-hidden">
+                <CardHeader className="bg-[#fdf8f3] border-b border-[#f3e6d6] py-5 px-8">
+                  <CardTitle className="font-serif text-2xl text-[#2c231c]">Customer Receipts</CardTitle>
+                  <CardDescription className="text-[#7d6852]">Manage and track all generated receipts</CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
                   <ReceiptTable receipts={receipts} />
@@ -181,10 +164,10 @@ export default function MerchantDashboardPage() {
             </TabsContent>
 
             <TabsContent value="settlements">
-              <Card className="rounded-[28px] border-[#eadbc9] shadow-sm overflow-hidden">
-                <CardHeader className="bg-[#fdf8f3] border-b border-[#f3e6d6]">
-                  <CardTitle>Settlement History</CardTitle>
-                  <CardDescription>Payouts to your connected account</CardDescription>
+              <Card className="rounded-[9px] border-[#eadbc9] bg-white shadow-sm overflow-hidden">
+                <CardHeader className="bg-[#fdf8f3] border-b border-[#f3e6d6] py-5 px-8">
+                  <CardTitle className="font-serif text-2xl text-[#2c231c]">Settlement History</CardTitle>
+                  <CardDescription className="text-[#7d6852]">Payouts to your connected account</CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
                   <TransactionTable transactions={transactions} />
@@ -196,57 +179,33 @@ export default function MerchantDashboardPage() {
 
         {/* Sidebar/Quick Actions */}
         <div className="space-y-6">
-          <Card className="rounded-[30px] border border-[#dcc9b2] bg-[#fff9f1] p-5 shadow-sm overflow-hidden">
-            <div className="flex items-start justify-between gap-4 mb-4">
+          <Card className="rounded-[9px] border border-[#dcc9b2] bg-[#fffcf8] p-6 shadow-sm overflow-hidden relative">
+            <div className="flex items-start justify-between gap-4 mb-6 relative">
               <div>
-                <Badge variant="outline" className="rounded-full border-[#d7c3ad] bg-[#f8f1e7] text-[#9b8468] uppercase tracking-wider text-[10px]">Store QR</Badge>
-                <h2 className="mt-2 text-xl font-bold">Print & Share</h2>
+                <Badge variant="outline" className="rounded-full border-[#d7c3ad] bg-white text-[#9b8468] uppercase tracking-[0.2em] text-[10px] font-bold px-3">Store QR</Badge>
+                <h2 className="mt-3 font-serif text-2xl font-bold text-[#2c231c]">Print & Share</h2>
               </div>
-              <div className="rounded-full bg-[#f8f1e7] p-2">
+              <div className="rounded-[9px] bg-[#facc15]/10 p-2.5">
                 <QrCode className="h-5 w-5 text-[#9b8468]" />
               </div>
             </div>
 
-            <div className="space-y-5">
-              <div className="rounded-[24px] border border-[#eadbc9] bg-white p-4 shadow-inner flex justify-center">
+            <div className="space-y-6 relative">
+              <div className="rounded-[9px] border border-[#eadbc9] bg-white p-6 shadow-inner flex justify-center group cursor-pointer">
                 {qrSvgMarkup ? (
-                  <div className="w-full max-w-[180px]" dangerouslySetInnerHTML={{ __html: qrSvgMarkup }} />
+                  <div className="w-full max-w-[200px]" dangerouslySetInnerHTML={{ __html: qrSvgMarkup }} />
                 ) : (
-                  <div className="h-[180px] w-[180px] animate-pulse bg-zinc-100 rounded-xl" />
+                  <div className="h-[200px] w-[200px] animate-pulse bg-zinc-100 rounded-[9px]" />
                 )}
               </div>
               
-              <div className="rounded-[24px] border border-[#eadbc9] bg-[#f8f1e7] p-4 text-center">
-                <p className="text-xs uppercase tracking-widest text-[#9b8468] font-semibold mb-1">Checkout URL</p>
-                <p className="text-sm font-mono break-all text-[#2c231c]">{merchantProfile.fixedCheckoutPath}</p>
+              <div className="rounded-[9px] border border-[#eadbc9] bg-[#fdf8f3] p-4 text-center">
+                <p className="text-[10px] uppercase tracking-[0.3em] text-[#9b8468] font-bold mb-1.5">Checkout URL</p>
+                <p className="text-sm font-mono break-all text-[#2c231c] font-medium select-all">{merchantProfile.fixedCheckoutPath}</p>
               </div>
 
-              <PosterActions paymentLink={posterLink} appUrl={appUrl} className="flex flex-col gap-2" />
+              <PosterActions paymentLink={posterLink} appUrl={appUrl} className="flex flex-col gap-3" />
             </div>
-          </Card>
-
-          <Card className="rounded-[30px] border border-[#eadbc9] bg-white p-5 shadow-sm">
-            <h3 className="font-bold mb-4 flex items-center gap-2">
-              <Users className="h-4 w-4" />
-              Quick Contacts
-            </h3>
-            <div className="space-y-4">
-              {[
-                { name: 'Support Team', status: 'Online' },
-                { name: 'Settlement Desk', status: 'Active' }
-              ].map((contact, i) => (
-                <div key={i} className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="h-8 w-8 rounded-full bg-[#f3e6d6] flex items-center justify-center font-bold text-xs">
-                      {contact.name[0]}
-                    </div>
-                    <span className="text-sm font-medium">{contact.name}</span>
-                  </div>
-                  <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100 border-none text-[10px]">{contact.status}</Badge>
-                </div>
-              ))}
-            </div>
-            <Button variant="outline" className="w-full mt-6 rounded-full text-xs">View all contacts</Button>
           </Card>
         </div>
       </div>

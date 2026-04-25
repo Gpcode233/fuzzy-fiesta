@@ -9,7 +9,6 @@ import Busha from '@/components/ui/pngs/busha-updated.png'
 export default function HeroSection() {
     return (
         <>
-            <HeroHeader />
             <main className="overflow-hidden">
                 <section className="bg-linear-to-b to-muted from-background">
                     <div className="relative py-36">

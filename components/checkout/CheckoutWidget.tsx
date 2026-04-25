@@ -6,14 +6,14 @@ import type { MerchantProfile, PaymentReceipt } from '@/types';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 import { CurrencySelector } from './CurrencySelector';
 import { Button } from '@/components/ui/button';
-import { 
-  Wallet, 
-  CreditCard, 
-  ArrowLeftRight, 
-  BadgeDollarSign,
-  CheckCircle2,
-  ArrowLeft
-} from 'lucide-react';
+import {
+  Wallet2,
+  Card2,
+  CheckCircle,
+  ArrowLeft,
+  RoundTransferHorizontal,
+  Dollar
+} from '@solar-icons/react'
 import { toast } from 'sonner';
 
 const currencySymbols: Record<string, string> = {
@@ -59,9 +59,9 @@ export function CheckoutWidget({
     try {
       const parsed = JSON.parse(stored);
       if (parsed.state && parsed.state.receipts) {
-        setBrowserReceipts(parsed.state.receipts.map((receipt: any) => ({ 
-          ...receipt, 
-          transactionId: normalizeTransactionId(receipt.transactionId) 
+        setBrowserReceipts(parsed.state.receipts.map((receipt: any) => ({
+          ...receipt,
+          transactionId: normalizeTransactionId(receipt.transactionId)
         })));
       }
     } catch {
@@ -121,7 +121,7 @@ export function CheckoutWidget({
             <span>{formattedCustomerAmount} {currencySymbols[currency] ?? currency}</span>
           </div>
         </div>
-        <Button 
+        <Button
           className="w-full rounded-full py-6 bg-black text-white hover:bg-zinc-800"
           onClick={() => window.location.href = '/'}
         >
@@ -149,11 +149,11 @@ export function CheckoutWidget({
             <p className="font-serif text-sm uppercase tracking-[0.3em] text-[#9b8468]">Checkout Session</p>
             <div className="mt-4 space-y-3 text-[#6e5a46]">
               <p className="flex items-center gap-2">
-                <CheckCircle2 className={cn("size-4", step !== 'id' ? "text-emerald-600" : "text-[#9b8468] opacity-30")} />
+                <CheckCircle className={cn("size-4", step !== 'id' ? "text-emerald-600" : "text-[#9b8468] opacity-30")} />
                 Identify Transaction
               </p>
               <p className="flex items-center gap-2">
-                <CheckCircle2 className={cn("size-4", step === 'success' ? "text-emerald-600" : "text-[#9b8468] opacity-30")} />
+                <CheckCircle className={cn("size-4", step === 'success' ? "text-emerald-600" : "text-[#9b8468] opacity-30")} />
                 Confirm & Pay
               </p>
             </div>
@@ -226,7 +226,7 @@ export function CheckoutWidget({
                 <CurrencySelector currencies={supportedCurrencies} value={currency} onChange={setCurrency} />
               </div>
 
-              <Button 
+              <Button
                 className="w-full rounded-full py-7 text-lg bg-[#facc15] text-black hover:bg-[#eab308] shadow-lg shadow-yellow-500/10"
                 disabled={transactionId.length < 6 || !activeReceipt}
                 onClick={() => setStep('confirm')}
@@ -242,21 +242,21 @@ export function CheckoutWidget({
                   Change ID
                 </Button>
               </div>
-              
+
               <div>
                 <h2 className="text-2xl font-bold text-zinc-900">Choose Payment Method</h2>
                 <p className="text-sm text-[#7d6852]">Final amount: {formattedCustomerAmount} {currency}</p>
               </div>
 
               <div className="grid gap-3">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="h-16 justify-between rounded-2xl border-[#ddcdb9] bg-white hover:bg-[#fdfaf5] group"
                   onClick={() => handlePayment('Web3 Wallet')}
                 >
                   <div className="flex items-center gap-3">
                     <div className="size-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:bg-blue-100">
-                      <Wallet className="size-5" />
+                      <Wallet2 className="size-5" />
                     </div>
                     <div className="text-left">
                       <p className="text-sm font-bold">Web3 Wallet</p>
@@ -265,14 +265,14 @@ export function CheckoutWidget({
                   </div>
                 </Button>
 
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="h-16 justify-between rounded-2xl border-[#ddcdb9] bg-white hover:bg-[#fdfaf5] group"
                   onClick={() => handlePayment('Dollar Account')}
                 >
                   <div className="flex items-center gap-3">
                     <div className="size-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:bg-emerald-100">
-                      <BadgeDollarSign className="size-5" />
+                      <Dollar className="size-5" />
                     </div>
                     <div className="text-left">
                       <p className="text-sm font-bold">Dollar Account</p>
@@ -281,14 +281,14 @@ export function CheckoutWidget({
                   </div>
                 </Button>
 
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="h-16 justify-between rounded-2xl border-[#ddcdb9] bg-white hover:bg-[#fdfaf5] group"
                   onClick={() => handlePayment('Card')}
                 >
                   <div className="flex items-center gap-3">
                     <div className="size-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center group-hover:bg-purple-100">
-                      <CreditCard className="size-5" />
+                      <Card2 className="size-5" />
                     </div>
                     <div className="text-left">
                       <p className="text-sm font-bold">Credit/Debit Card</p>
@@ -297,14 +297,14 @@ export function CheckoutWidget({
                   </div>
                 </Button>
 
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="h-16 justify-between rounded-2xl border-[#ddcdb9] bg-white hover:bg-[#fdfaf5] group"
                   onClick={() => handlePayment('Transfer')}
                 >
                   <div className="flex items-center gap-3">
                     <div className="size-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center group-hover:bg-amber-100">
-                      <ArrowLeftRight className="size-5" />
+                      <RoundTransferHorizontal className="size-5" />
                     </div>
                     <div className="text-left">
                       <p className="text-sm font-bold">Bank Transfer</p>

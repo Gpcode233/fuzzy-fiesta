@@ -3,19 +3,19 @@
 import { useMemo, useState } from 'react';
 import { useStore } from '@/lib/store/useStore';
 import type { InventoryItem, PaymentReceipt } from '@/types';
-import { 
-  AddCircle, 
-  SearchMagnifyingGlass, 
+import {
+  AddCircle,
+  RoundedMagnifierZoomIn,
   Bag,
-  Trash,
-  ChevronDown,
+  TrashBin2,
+  RoundAltArrowDown,
   ArrowLeft,
-  Check
+  CheckCircle
 } from '@solar-icons/react';
-import { 
-  Card, 
-  CardContent, 
-  CardHeader, 
+import {
+  Card,
+  CardContent,
+  CardHeader,
   CardTitle,
   CardDescription
 } from '@/components/ui/card';
@@ -132,19 +132,19 @@ export function StoreBuilder() {
               <div className="space-y-6">
                 <div className="space-y-2">
                   <Label className="text-xs uppercase tracking-widest text-muted-foreground">Customer Name / Label</Label>
-                  <Input 
+                  <Input
                     className="rounded-xl border-[#eadbc9] h-12"
-                    value={customerLabel} 
-                    onChange={(event) => setCustomerLabel(event.target.value)} 
-                    placeholder="Walk-in customer" 
+                    value={customerLabel}
+                    onChange={(event) => setCustomerLabel(event.target.value)}
+                    placeholder="Walk-in customer"
                   />
                 </div>
 
                 <div className="space-y-4">
                   {rows.map((row) => {
                     const item = findItem(row.itemId);
-                    const matches = inventory.filter((entry) => 
-                      entry.name.toLowerCase().includes(row.query.toLowerCase()) && 
+                    const matches = inventory.filter((entry) =>
+                      entry.name.toLowerCase().includes(row.query.toLowerCase()) &&
                       !rows.some(r => r.itemId === entry.id && r.id !== row.id)
                     ).slice(0, 5);
 
@@ -154,7 +154,7 @@ export function StoreBuilder() {
                           <div className="space-y-2">
                             <Label className="text-[10px] uppercase tracking-[0.2em] text-[#9b8468]">Item Search</Label>
                             <div className="relative">
-                              <SearchMagnifyingGlass weight="BoldDuotone" className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#9b8468] opacity-60" />
+                              <RoundedMagnifierZoomIn weight="BoldDuotone" className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#9b8468] opacity-60" />
                               <Input
                                 className="rounded-xl pl-10 h-11 bg-white border-[#eadbc9]"
                                 value={row.query}
@@ -195,13 +195,13 @@ export function StoreBuilder() {
                             />
                           </div>
 
-                          <Button 
-                            variant="ghost" 
-                            size="icon" 
+                          <Button
+                            variant="ghost"
+                            size="icon"
                             onClick={() => removeRow(row.id)}
                             className="text-muted-foreground hover:text-red-500 hover:bg-red-50 rounded-full"
                           >
-                            <Trash className="h-4 w-4" />
+                            <TrashBin2 className="h-4 w-4" />
                           </Button>
                         </div>
 
@@ -247,8 +247,8 @@ export function StoreBuilder() {
                 </div>
 
                 <div className="flex gap-4">
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     className="flex-1 rounded-full py-6"
                     onClick={() => setStep('build')}
                   >
@@ -259,7 +259,7 @@ export function StoreBuilder() {
                     className="flex-[2] rounded-full py-6 bg-black text-white hover:bg-zinc-800"
                     onClick={generateReceipt}
                   >
-                    <Check className="mr-2 size-4" />
+                    <CheckCircle className="mr-2 size-4" />
                     Confirm & Generate ID
                   </Button>
                 </div>
@@ -319,7 +319,7 @@ export function StoreBuilder() {
                 <span className="font-bold">{customerLabel || 'Walk-in'}</span>
               </div>
               <div className="h-px bg-[#f3e6d6]" />
-              
+
               <div className="space-y-4 min-h-[100px]">
                 {selectedItems.length ? selectedItems.map((row) => (
                   <div key={row.id} className="flex items-start justify-between gap-4 text-sm">
@@ -346,7 +346,7 @@ export function StoreBuilder() {
 
             <div className="rounded-[20px] bg-[#fdf8f3] border border-[#f3e6d6] p-4 flex gap-3">
               <div className="size-8 rounded-full bg-white border border-[#eadbc9] flex items-center justify-center shrink-0 shadow-sm">
-                <ChevronDown className="h-4 w-4 text-[#9b8468]" />
+                <RoundAltArrowDown className="h-4 w-4 text-[#9b8468]" />
               </div>
               <p className="text-[11px] leading-relaxed text-[#6e5a46]">
                 This receipt will be saved as <span className="font-bold">DRAFT</span>. Customer payment will update it to <span className="font-bold text-emerald-600">PAID</span> automatically.

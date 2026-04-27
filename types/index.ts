@@ -23,6 +23,7 @@ export interface PaymentLink {
   totalReceived: number;
   transactionCount: number;
   createdAt: string;
+  hostedUrl?: string;
 }
 
 export interface MerchantProfile {

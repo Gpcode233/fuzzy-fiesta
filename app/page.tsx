@@ -6,6 +6,7 @@ import HeroSection from '@/components/hero-section-one';
 import { useStore } from '@/lib/store/useStore';
 import { Button } from '@/components/ui/button';
 import { LayoutDashboard, LogIn, ArrowRight } from 'lucide-react';
+import { MerchantIllustration, DeveloperIllustration } from '@/components/shared/Illustrations';
 
 const businessFeatures = [
   {
@@ -79,6 +80,7 @@ export default function HomePage() {
         title="Built for Merchants"
         description="Everything you need to run your physical store in a digital-first world. Collect any currency, manage stock, and grow."
         features={businessFeatures}
+        illustration={<MerchantIllustration />}
       />
 
       <FeaturesSection
@@ -86,6 +88,7 @@ export default function HomePage() {
         description="Powerful developer tools to integrate, automate, and scale your payment operations globally."
         features={developerFeatures}
         reverse={true}
+        illustration={<DeveloperIllustration />}
       />
 
       <footer className="mt-20 py-12 border-t border-zinc-100 text-center">
